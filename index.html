@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Twitch Chat Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+  <base target="_blank">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+      <div class="status disconnected" id="status">
+        <strong>Status:</strong> <span id="statusText">Disconnected</span>
+      </div>
+
+      <h2>Chat Settings</h2>
+
+      <div class="setting-group">
+        <label for="channel">Channel Name</label>
+        <input type="text" id="channel" placeholder="twitch_channel" />
+
+        <div class="input-row">
+          <button id="btnConnect" class="action-btn success">Connect</button>
+          <button id="btnDisconnect" class="action-btn warning">Disconnect</button>
+        </div>
+
+        <label class="quick-connect-label">Quick Connect</label>
+        <div class="quick-connect-grid">
+          <button onclick="window.chatManager.quickConnect('RieLoveChan')">RieLoveChan</button>
+          <button onclick="window.chatManager.quickConnect('xQc')">xQc</button>
+          <button onclick="window.chatManager.quickConnect('Ninja')">Ninja</button>
+        </div>
+      </div>
+
+      <!-- Chat Display Config (Parent Wrapper) -->
+      <div class="setting-group collapsible expanded">
+        <div class="collapsible-header">
+          <label>Chat Display Config</label>
+        </div>
+        <div class="collapsible-content">
+
+          <!-- Global Options for Display -->
+          <div class="setting-group">
+            <label for="chatDirection">Chat Direction</label>
+            <select id="chatDirection">
+              <option value="column-reverse" selected>Bottom to Top</option>
+              <option value="column">Top to Bottom</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label for="maxMessages">Max Items</label>
+            <input type="number" id="maxMessages" min="1" value="15" step="1" />
+          </div>
+
+          <div class="setting-group">
+            <label>Event Visibility</label>
+            <div class="checkbox-group">
+              <input type="checkbox" id="showRedemptions" checked />
+              <label for="showRedemptions">Show Channel Points</label>
+            </div>
+            <div class="checkbox-group" style="margin-top:5px;">
+              <input type="checkbox" id="showCheers" checked />
+              <label for="showCheers">Show Bits / Cheers</label>
+            </div>
+          </div>
+
+          <!-- Item Settings Segment (Nested) -->
+          <div class="setting-group sub-section collapsible">
+            <div class="collapsible-header">
+              <label>Item</label>
+            </div>
+            <div class="collapsible-content">
+              <div class="setting-group">
+                <div class="checkbox-group">
+                  <input type="checkbox" id="ignoreCommands" />
+                  <label for="ignoreCommands">Ignore Commands (!)</label>
+                </div>
+              </div>
+
+              <div class="setting-group">
+                <label for="itemInAnimation">In Animation</label>
+                <select id="itemInAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-in">Custom (See below)</option>
+                  <option value="slide-up">Slide Up</option>
+                  <option value="slide-down">Slide Down</option>
+                  <option value="fade-in">Fade In</option>
+                  <option value="slide-in">Slide In Left</option>
+                  <option value="slide-left">Slide In Right</option>
+                  <option value="bounce-in">Bounce In</option>
+                  <option value="elastic">Elastic</option>
+                  <option value="scale-in">Scale In</option>
+                  <option value="rotate-in">Rotate In</option>
+                  <option value="flip">Flip (3D)</option>
+                  <option value="back-in-down">Back In Down</option>
+                  <option value="jello">Jello</option>
+                  <option value="wobble">Wobble</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="itemStayAnimation">Stay Animation</label>
+                <select id="itemStayAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-stay">Custom (See below)</option>
+                  <option value="pulse">Pulse</option>
+                  <option value="bounce">Bounce</option>
+                  <option value="glow">Glow</option>
+                  <option value="spin">Spin</option>
+                  <option value="shake">Shake</option>
+                  <option value="heartbeat">Heartbeat</option>
+                  <option value="swing">Swing</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="itemOutAnimation">Out Animation</label>
+                <select id="itemOutAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-out">Custom (See below)</option>
+                  <option value="fade-out">Fade Out</option>
+                  <option value="slide-out-left">Slide Out Left</option>
+                  <option value="slide-out-right">Slide Out Right</option>
+                  <option value="slide-out-up">Slide Out Up</option>
+                  <option value="slide-out-down">Slide Out Down</option>
+                  <option value="scale-out">Scale Out</option>
+                  <option value="dissolve">Dissolve</option>
+                  <option value="flip-out">Flip Out</option>
+                  <option value="rotate-out">Rotate Out</option>
+                  <option value="back-out-down">Back Out Down</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="animationSpeed">Animation Speed (Seconds)</label>
+                <input type="number" id="animationSpeed" min="0.1" max="10" value="0.3" step="0.1" />
+              </div>
+
+              <div class="setting-group">
+                <label for="itemStretch">Stretch to fill panel</label>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="itemStretch" checked />
+                  <label for="itemStretch">Enable</label>
+                </div>
+              </div>
+
+              <div class="setting-group">
+                <label for="itemZoom">Zoom</label>
+                <input type="number" id="itemZoom" min="0.1" max="5" value="1.0" step="0.1" />
+              </div>
+
+              <div class="setting-group">
+                <label for="messageDecay">Message Decay Time</label>
+                <input type="number" id="messageDecay" min="0" value="60" step="1" />
+              </div>
+
+              <div class="setting-group">
+                <label for="itemPaddingH">Horizontal Padding</label>
+                <input type="number" id="itemPaddingH" min="0" value="0" step="5" />
+              </div>
+
+              <div class="setting-group">
+                <label for="itemPaddingV">Vertical Padding</label>
+                <input type="number" id="itemPaddingV" min="0" value="0" step="5" />
+              </div>
+
+              <!-- Box Color Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Box Color</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="itemBgColor">Color</label>
+                    <input type="color" id="itemBgColor" value="#000000" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="itemBgOpacity">Alpha: <span id="itemBgOpacityValue">25%</span></label>
+                    <input type="range" id="itemBgOpacity" min="0" max="100" value="25" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="borderRadius">Corner Roundness</label>
+                    <input type="number" id="borderRadius" min="0" value="8" step="1" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Image</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="itemBgUrl">Load from URL</label>
+                    <input type="text" id="itemBgUrl" placeholder="Example https://www.website.com/image.jpg" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="itemBgFile">Load from Local</label>
+                    <div class="file-input-wrapper">
+                      <input type="file" id="itemBgFile" accept="image/*" />
+                      <label for="itemBgFile" class="file-input-label">Click to Choose Image</label>
+                    </div>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="itemBgImageOpacity">Image Alpha: <span id="itemBgImageOpacityValue">50%</span></label>
+                    <input type="range" id="itemBgImageOpacity" min="0" max="100" value="50" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <button onclick="clearBackground('item')"
+                      style="width: 100%; padding: 8px; background: #4a4a4a; border: 1px solid #666; color: #fff; border-radius: 4px; cursor: pointer;">Unload
+                      Image</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Header Element Segment (Nested) -->
+          <div class="setting-group sub-section collapsible">
+            <div class="collapsible-header">
+              <label>Header</label>
+            </div>
+            <div class="collapsible-content">
+              <div class="setting-group">
+                <label for="headerInAnimation">In Animation</label>
+                <select id="headerInAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-in">Custom</option>
+                  <option value="fade-in">Fade In</option>
+                  <option value="slide-in">Slide In</option>
+                  <option value="slide-left">Slide Left</option>
+                  <option value="slide-up">Slide Up</option>
+                  <option value="bounce-in">Bounce In</option>
+                  <option value="elastic">Elastic</option>
+                  <option value="scale-in">Scale In</option>
+                  <option value="rotate-in">Rotate In</option>
+                  <option value="flip">Flip (3D)</option>
+                  <option value="back-in-down">Back In Down</option>
+                  <option value="wobble">Wobble</option>
+                  <option value="jello">Jello</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="headerStayAnimation">Stay Animation</label>
+                <select id="headerStayAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-stay">Custom</option>
+                  <option value="pulse">Pulse</option>
+                  <option value="bounce">Bounce</option>
+                  <option value="glow">Glow</option>
+                  <option value="spin">Spin</option>
+                  <option value="shake">Shake</option>
+                  <option value="heartbeat">Heartbeat</option>
+                  <option value="swing">Swing</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="headerOutAnimation">Out Animation</label>
+                <select id="headerOutAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-out">Custom</option>
+                  <option value="fade-out">Fade Out</option>
+                  <option value="slide-out-left">Slide Out Left</option>
+                  <option value="slide-out-right">Slide Out Right</option>
+                  <option value="scale-out">Scale Out</option>
+                  <option value="dissolve">Dissolve</option>
+                  <option value="flip-out">Flip Out</option>
+                </select>
+              </div>
+
+              <!-- Text Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Text</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="headerFontFamily">Font</label>
+                    <select id="headerFontFamily">
+                      <option value="monospace" selected>Monospace</option>
+                      <option value="Arial, sans-serif">Arial</option>
+                      <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                      <option value="'Roboto', sans-serif">Roboto</option>
+                      <option value="'Open Sans', sans-serif">Open Sans</option>
+                      <option value="'Poppins', sans-serif">Poppins</option>
+                      <option value="'Orbitron', monospace">Orbitron</option>
+                      <option value="'Press Start 2P', cursive">Pixel</option>
+                    </select>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="headerTextAlign">Text Align</label>
+                    <select id="headerTextAlign">
+                      <option value="flex-start" selected>Left</option>
+                      <option value="center">Center</option>
+                      <option value="flex-end">Right</option>
+                    </select>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="usernameColor">Color</label>
+                    <input type="color" id="usernameColor" value="#FFFFFF" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="headerTextOpacity">Alpha: <span id="headerTextOpacityValue">0%</span></label>
+                    <input type="range" id="headerTextOpacity" min="0" max="100" value="0" step="5" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Box Color Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Box Color</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="headerBgColor">Color</label>
+                    <input type="color" id="headerBgColor" value="#000000" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="headerBgOpacity">Alpha: <span id="headerBgOpacityValue">25%</span></label>
+                    <input type="range" id="headerBgOpacity" min="0" max="100" value="25" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="headerBorderRadius">Corner Roundness</label>
+                    <input type="number" id="headerBorderRadius" min="0" value="8" step="1" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Image</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="headerBgUrl">Load from URL</label>
+                    <input type="text" id="headerBgUrl" placeholder="Example https://www.website.com/image.jpg" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="headerBgFile">Load from Local</label>
+                    <div class="file-input-wrapper">
+                      <input type="file" id="headerBgFile" accept="image/*" />
+                      <label for="headerBgFile" class="file-input-label">Click to Choose Image</label>
+                    </div>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="headerBgImageOpacity">Image Alpha: <span
+                        id="headerBgImageOpacityValue">50%</span></label>
+                    <input type="range" id="headerBgImageOpacity" min="0" max="100" value="50" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <button onclick="clearBackground('header')"
+                      style="width: 100%; padding: 8px; background: #4a4a4a; border: 1px solid #666; color: #fff; border-radius: 4px; cursor: pointer;">Unload
+                      Image</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Element Segment (Nested) -->
+          <div class="setting-group sub-section collapsible">
+            <div class="collapsible-header">
+              <label>Message</label>
+            </div>
+            <div class="collapsible-content">
+              <div class="setting-group">
+                <label for="messageInAnimation">In Animation</label>
+                <select id="messageInAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-in">Custom</option>
+                  <option value="slide-left">Slide Left</option>
+                  <option value="fade-in">Fade In</option>
+                  <option value="slide-in">Slide In</option>
+                  <option value="slide-up">Slide Up</option>
+                  <option value="bounce-in">Bounce In</option>
+                  <option value="elastic">Elastic</option>
+                  <option value="scale-in">Scale In</option>
+                  <option value="rotate-in">Rotate In</option>
+                  <option value="flip">Flip (3D)</option>
+                  <option value="wobble">Wobble</option>
+                  <option value="jello">Jello</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="messageStayAnimation">Stay Animation</label>
+                <select id="messageStayAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-stay">Custom</option>
+                  <option value="pulse">Pulse</option>
+                  <option value="bounce">Bounce</option>
+                  <option value="glow">Glow</option>
+                  <option value="spin">Spin</option>
+                  <option value="shake">Shake</option>
+                  <option value="heartbeat">Heartbeat</option>
+                  <option value="swing">Swing</option>
+                </select>
+              </div>
+
+              <div class="setting-group">
+                <label for="messageOutAnimation">Out Animation</label>
+                <select id="messageOutAnimation">
+                  <option value="none" selected>None</option>
+                  <option value="custom-out">Custom</option>
+                  <option value="slide-out-right">Slide Out Right</option>
+                  <option value="fade-out">Fade Out</option>
+                  <option value="slide-out-left">Slide Out Left</option>
+                  <option value="scale-out">Scale Out</option>
+                  <option value="dissolve">Dissolve</option>
+                  <option value="flip-out">Flip Out</option>
+                </select>
+              </div>
+
+              <!-- Text Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Text</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="messageFontFamily">Font</label>
+                    <select id="messageFontFamily">
+                      <option value="monospace" selected>Monospace</option>
+                      <option value="Arial, sans-serif">Arial</option>
+                      <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                      <option value="'Roboto', sans-serif">Roboto</option>
+                      <option value="'Open Sans', sans-serif">Open Sans</option>
+                      <option value="'Poppins', sans-serif">Poppins</option>
+                      <option value="'Orbitron', monospace">Orbitron</option>
+                      <option value="'Press Start 2P', cursive">Pixel</option>
+                    </select>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageTextAlign">Text Align</label>
+                    <select id="messageTextAlign">
+                      <option value="left" selected>Left</option>
+                      <option value="center">Center</option>
+                      <option value="right">Right</option>
+                    </select>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="textColor">Color</label>
+                    <input type="color" id="textColor" value="#FFFFFF" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageTextOpacity">Alpha: <span id="messageTextOpacityValue">0%</span></label>
+                    <input type="range" id="messageTextOpacity" min="0" max="100" value="0" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageLetterSpacing">Horizontal Spacing (px)</label>
+                    <input type="number" id="messageLetterSpacing" min="-5" max="20" value="0" step="1" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="emoteSize">Emote Size</label>
+                    <input type="number" id="emoteSize" min="10" value="14" step="1" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Text Effects Sub-section (Shadow & Stroke) -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header"><label>Effects (Shadow & Stroke)</label></div>
+                <div class="collapsible-content">
+                  <div class="setting-group"><label
+                      style="color:#aaa;border-bottom:1px solid #444;padding-bottom:2px;margin-top:5px;">Shadow</label>
+                  </div>
+                  <div class="input-row">
+                    <div class="setting-group"><label>X Offset</label><input type="number" id="msgShadowX" value="0"
+                        step="1"></div>
+                    <div class="setting-group"><label>Y Offset</label><input type="number" id="msgShadowY" value="0"
+                        step="1"></div>
+                  </div>
+                  <div class="setting-group">
+                    <label>Blur / Spread</label><input type="number" id="msgShadowBlur" value="0" step="1">
+                  </div>
+                  <div class="setting-group">
+                    <label>Shadow Color</label><input type="color" id="msgShadowColor" value="#000000">
+                  </div>
+
+                  <div class="setting-group"><label
+                      style="color:#aaa;border-bottom:1px solid #444;padding-bottom:2px;margin-top:5px;">Stroke
+                      (Outline)</label></div>
+                  <div class="setting-group">
+                    <label>Stroke Size (px)</label><input type="number" id="msgStrokeWidth" value="0" step="0.5"
+                      min="0">
+                  </div>
+                  <div class="setting-group">
+                    <label>Stroke Color</label><input type="color" id="msgStrokeColor" value="#000000">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Box Color Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Box Color</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="messageBgColor">Color</label>
+                    <input type="color" id="messageBgColor" value="#000000" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageBgOpacity">Alpha: <span id="messageBgOpacityValue">25%</span></label>
+                    <input type="range" id="messageBgOpacity" min="0" max="100" value="25" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageBorderRadius">Corner Roundness</label>
+                    <input type="number" id="messageBorderRadius" min="0" value="8" step="1" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Image Sub-section -->
+              <div class="setting-group sub-section collapsible">
+                <div class="collapsible-header">
+                  <label>Image</label>
+                </div>
+                <div class="collapsible-content">
+                  <div class="setting-group">
+                    <label for="messageBgUrl">Load from URL</label>
+                    <input type="text" id="messageBgUrl" placeholder="Example https://www.website.com/image.jpg" />
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageBgFile">Load from Local</label>
+                    <div class="file-input-wrapper">
+                      <input type="file" id="messageBgFile" accept="image/*" />
+                      <label for="messageBgFile" class="file-input-label">Click to Choose Image</label>
+                    </div>
+                  </div>
+
+                  <div class="setting-group">
+                    <label for="messageBgImageOpacity">Alpha: <span id="messageBgImageOpacityValue">50%</span></label>
+                    <input type="range" id="messageBgImageOpacity" min="0" max="100" value="50" step="5" />
+                  </div>
+
+                  <div class="setting-group">
+                    <button onclick="clearBackground('message')"
+                      style="width: 100%; padding: 8px; background: #4a4a4a; border: 1px solid #666; color: #fff; border-radius: 4px; cursor: pointer;">Unload
+                      Image</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Animation Sub-Section -->
+      <div class="setting-group collapsible">
+        <div class="collapsible-header"><label>Custom Animation Settings</label></div>
+        <div class="collapsible-content">
+          <div class="setting-group"><label
+              style="color:#aaa;border-bottom:1px solid #444;padding-bottom:2px;margin-top:5px;">IN (Start
+              Position)</label></div>
+          <div class="input-row">
+            <div class="setting-group"><label>X Offset (px)</label><input type="number" id="customInX" value="0"
+                step="5"></div>
+            <div class="setting-group"><label>Y Offset (px)</label><input type="number" id="customInY" value="50"
+                step="5"></div>
+          </div>
+          <div class="input-row">
+            <div class="setting-group"><label>Rotate (deg)</label><input type="number" id="customInRot" value="0"
+                step="5"></div>
+            <div class="setting-group"><label>Scale</label><input type="number" id="customInScale" value="0.5"
+                step="0.1"></div>
+          </div>
+          <div class="setting-group"><label>Start Opacity (0-1)</label><input type="number" id="customInOpacity"
+              value="0" step="0.1" max="1" min="0"></div>
+
+          <div class="setting-group"><label
+              style="color:#aaa;border-bottom:1px solid #444;padding-bottom:2px;margin-top:5px;">STAY (Mid
+              Position)</label></div>
+          <div class="input-row">
+            <div class="setting-group"><label>Move X (px)</label><input type="number" id="customStayX" value="5"
+                step="1"></div>
+            <div class="setting-group"><label>Move Y (px)</label><input type="number" id="customStayY" value="5"
+                step="1"></div>
+          </div>
+          <div class="input-row">
+            <div class="setting-group"><label>Rotate (deg)</label><input type="number" id="customStayRot" value="2"
+                step="1"></div>
+            <div class="setting-group"><label>Scale</label><input type="number" id="customStayScale" value="1.05"
+                step="0.01"></div>
+          </div>
+
+          <div class="setting-group"><label
+              style="color:#aaa;border-bottom:1px solid #444;padding-bottom:2px;margin-top:5px;">OUT (End
+              Position)</label></div>
+          <div class="input-row">
+            <div class="setting-group"><label>X Offset (px)</label><input type="number" id="customOutX" value="0"
+                step="5"></div>
+            <div class="setting-group"><label>Y Offset (px)</label><input type="number" id="customOutY" value="-50"
+                step="5"></div>
+          </div>
+          <div class="input-row">
+            <div class="setting-group"><label>Rotate (deg)</label><input type="number" id="customOutRot" value="0"
+                step="5"></div>
+            <div class="setting-group"><label>Scale</label><input type="number" id="customOutScale" value="1.5"
+                step="0.1"></div>
+          </div>
+          <div class="setting-group"><label>End Opacity (0-1)</label><input type="number" id="customOutOpacity"
+              value="0" step="0.1" max="1" min="0"></div>
+        </div>
+      </div>
+
+      <!-- Panel Customization Segment (Renamed to Settings) -->
+      <div class="setting-group collapsible">
+        <div class="collapsible-header">
+          <label>Settings</label>
+        </div>
+        <div class="collapsible-content">
+          <div class="setting-group">
+            <label>Settings JSON (No Images)</label>
+            <textarea id="settingsJsonText"></textarea>
+            <div class="input-row">
+              <button onclick="window.settingsManager.loadJsonFromFile()">Load JSON File</button>
+              <button onclick="window.settingsManager.applyJsonFromText()">Apply JSON</button>
+            </div>
+            <div class="input-row">
+              <button onclick="window.settingsManager.exportSettings()" class="action-btn success">Export
+                Settings</button> <!-- New Button -->
+              <button onclick="window.settingsManager.copyJsonFromText()" class="action-btn">Copy JSON</button>
+              <button onclick="window.settingsManager.restoreDefaults()" class="action-btn warning">Restore
+                Defaults</button>
+            </div>
+            <input type="file" id="jsonFileInput" style="display:none;" accept=".json" />
+          </div>
+
+          <hr style="border:0; border-top:1px solid #444; margin: 15px 0;">
+
+          <div class="setting-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="showConnectionMsg" />
+              <label for="showConnectionMsg">Show "Connected to..." Message</label>
+            </div>
+            <label style="margin-top:5px;">Connection Message Decay (s)</label>
+            <input type="number" id="connectionMsgDecay" min="0" value="10" step="1">
+          </div>
+
+          <div class="setting-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="showWatermark" checked />
+              <label for="showWatermark">Show "Chat v0.003..."</label>
+            </div>
+          </div>
+
+          <hr style="border:0; border-top:1px solid #444; margin: 15px 0;">
+
+          <div class="setting-group">
+            <label for="panelBgColor">Background Color</label>
+            <input type="color" id="panelBgColor" value="#1a1a1a">
+          </div>
+          <div class="setting-group">
+            <label for="panelSectionBg">Section Background Color</label>
+            <input type="color" id="panelSectionBg" value="#252525">
+          </div>
+          <div class="setting-group">
+            <label for="panelTextColor">Text Color</label>
+            <input type="color" id="panelTextColor" value="#ffffff">
+          </div>
+          <div class="setting-group">
+            <label for="panelFontFamily">Font</label>
+            <select id="panelFontFamily">
+              <option value="monospace" selected>Monospace</option>
+              <option value="Arial, sans-serif">Arial</option>
+              <option value="'Segoe UI', sans-serif">Segoe UI</option>
+              <option value="'Roboto', sans-serif">Roboto</option>
+            </select>
+          </div>
+          <div class="setting-group">
+            <label for="panelFontSize">Font Size</label>
+            <input type="number" id="panelFontSize" value="14" min="10" max="24">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel">
+      <div id="chat">
+        <ul></ul>
+      </div>
+      <div class="watermark">Chat v0.003 by RieLoveChan</div>
+    </div>
+  </div>
+
+  <!-- Load ComfyJS -->
+  <script src="https://cdn.jsdelivr.net/npm/comfy.js@latest/dist/comfy.min.js"></script>
+  <script>
+    window.ComfyJS || document.write('<script src="comfy.min.js"><\\/script>');
+  </script>
+
+  <!-- Load Modules (Standard Script Mode for file:// compatibility) -->
+  <script src="src/SettingsManager.js"></script>
+  <script src="src/ChatManager.js"></script>
+  <script src="src/main.js"></script>
+</body>
+
+</html>
