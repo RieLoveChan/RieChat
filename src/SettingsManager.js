@@ -3,7 +3,7 @@ class SettingsManager {
         this.settings = {};
         this.controls = {};
         this.initControls();
-        this.init();
+        this.initControls();
         this.bindEvents();
         this.initCollapsible();
         this.enhanceColorPickers();
@@ -19,25 +19,14 @@ class SettingsManager {
                 this.settings = jsonSettings;
                 this.applyLoadedSettings();
                 this.applySettings();
-                return;
             } else {
-                // Try Capitalized just in case
-                const responseCap = await fetch('Settings.json');
-                if (responseCap.ok) {
-                    const jsonSettings = await responseCap.json();
-                    this.settings = jsonSettings;
-                    this.applyLoadedSettings();
-                    this.applySettings();
-                    return;
-                }
+                console.warn("settings.json not found, using defaults.");
+                this.applySettings();
             }
         } catch (e) {
-            // console.log("settings.json found or readable, falling back to local storage.");
+            console.error("Error loading settings.json:", e);
+            this.applySettings();
         }
-
-        // Fallback to local storage
-        this.loadSettings();
-        this.applySettings();
     }
 
     initControls() {
@@ -230,7 +219,6 @@ class SettingsManager {
     updateSetting(key, value) {
         this.settings[key] = value;
         this.applySettings();
-        this.saveSettings();
         this.updateJsonTextArea();
     }
 
@@ -367,24 +355,6 @@ class SettingsManager {
         return color; // Simple helper placeholder
     }
 
-    saveSettings() {
-        localStorage.setItem('twitchChatSettingsV9', JSON.stringify(this.settings));
-    }
-
-    loadSettings() {
-        const saved = localStorage.getItem('twitchChatSettingsV9');
-        if (saved) {
-            try {
-                this.settings = JSON.parse(saved);
-            } catch (e) {
-                console.error('Failed to load settings:', e);
-                this.settings = {};
-            }
-        }
-
-        this.applyLoadedSettings();
-    }
-
     applyLoadedSettings() {
         // Apply loaded values to controls
         Object.entries(this.controls).forEach(([key, control]) => {
@@ -442,7 +412,6 @@ class SettingsManager {
                 this.settings = { ...this.settings, ...json };
                 this.applyLoadedSettings();
                 this.applySettings();
-                this.saveSettings();
                 alert('Settings Applied Successfully!');
             }
         } catch (e) {
@@ -470,8 +439,7 @@ class SettingsManager {
     }
 
     restoreDefaults() {
-        if (confirm('Are you sure you want to restore default settings? This cannot be undone.')) {
-            localStorage.removeItem('twitchChatSettingsV9');
+        if (confirm('Are you sure you want to restore default settings? This will refresh the page and load settings.json.')) {
             location.reload();
         }
     }
