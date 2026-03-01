@@ -52,7 +52,7 @@ class SettingsManager {
             // Panel Customization
             'panelBgColor', 'panelSectionBg', 'panelTextColor', 'panelFontFamily', 'panelFontSize',
             // New Features
-            'showConnectionMsg', 'connectionMsgDecay', 'showWatermark'
+            'showConnectionMsg', 'connectionMsgDecay'
         ];
 
         controlIds.forEach(id => {
@@ -244,8 +244,6 @@ class SettingsManager {
         root.style.setProperty('--chat-direction', this.settings.chatDirection || 'column-reverse');
         root.style.setProperty('--show-animation-duration', this.getSafeFloat('animationSpeed', 0.3) + 's');
         root.style.setProperty('--hide-animation-duration', this.getSafeFloat('animationSpeed', 0.3) + 's');
-        root.style.setProperty('--watermark-display', this.settings.showWatermark !== false ? 'block' : 'none');
-        root.style.setProperty('--watermark-color', this.settings.panelTextColor || '#666');
 
         if (window.chatManager) {
             window.chatManager.maxMessages = this.getSafeInt('maxMessages', 15);

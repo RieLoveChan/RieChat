@@ -74,10 +74,6 @@
       --show-animation-duration: 0.3s;
       --hide-animation-duration: 0.3s;
       
-      /* Watermark */
-      --watermark-display: block;
-      --watermark-color: #666;
-
       /* Custom Animation Variables (Default placeholders) */
       --custom-in-x: 0px; --custom-in-y: 50px; --custom-in-rot: 0deg; --custom-in-scale: 0.5; --custom-in-opacity: 0;
       --custom-out-x: 0px; --custom-out-y: -50px; --custom-out-rot: 0deg; --custom-out-scale: 1.5; --custom-out-opacity: 0;
@@ -529,21 +525,6 @@
       opacity: calc(1 - var(--header-text-opacity) / 100);
       position: relative;
       z-index: 1;
-    }
-    
-    /* Watermark */
-    .watermark {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 10px;
-        color: var(--watermark-color);
-        opacity: 0.5;
-        pointer-events: none;
-        display: var(--watermark-display);
-        z-index: 0;
-        font-family: monospace;
     }
     
     /* Layout Helpers */

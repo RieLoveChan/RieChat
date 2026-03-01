@@ -1,5 +1,5 @@
 {
-    "channel": "xQc",
+    "channel": "RieLoveChan",
     "ignoreCommands": false,
     "maxMessages": "20",
     "chatDirection": "column-reverse",
@@ -18,8 +18,7 @@
     "panelSectionBg": "#252525",
     "panelTextColor": "#ffffff",
     "showConnectionMsg": true,
-    "connectionMsgDecay": "600",
-    "showWatermark": false,
+    "connectionMsgDecay": "1200",
     "itemInAnimation": "custom-in",
     "itemStayAnimation": "none",
     "itemOutAnimation": "slide-out-right",
