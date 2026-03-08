@@ -42,7 +42,6 @@
     "msgStrokeWidth": "0",
     "messageBgOpacity": "55",
     "panelPosition": true,
-    "itemBgFile": "C:\\fakepath\\photo.jpg",
     "itemBgUrl": "chat_bg/photo.jpg",
     "headerOutAnimation": "slide-out-left",
     "headerTextAlign": "center",

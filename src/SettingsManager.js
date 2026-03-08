@@ -34,13 +34,13 @@ class SettingsManager {
             'channel', 'ignoreCommands', 'maxMessages', 'chatDirection',
             'showRedemptions', 'showCheers', 'showStreaks',
             'itemInAnimation', 'itemStayAnimation', 'itemOutAnimation', 'animationSpeed', 'itemStretch', 'itemZoom', 'messageDecay', 'itemPaddingH', 'itemPaddingV',
-            'itemBgColor', 'itemBgOpacity', 'itemBgUrl', 'itemBgFile', 'itemBgImageOpacity', 'borderRadius',
+            'itemBgColor', 'itemBgOpacity', 'itemBgUrl', 'itemBgImageOpacity', 'borderRadius',
             'headerInAnimation', 'headerStayAnimation', 'headerOutAnimation',
             'headerFontFamily', 'headerTextAlign', 'usernameColor', 'headerTextOpacity',
-            'headerBgColor', 'headerBgOpacity', 'headerBorderRadius', 'headerBgUrl', 'headerBgFile', 'headerBgImageOpacity',
+            'headerBgColor', 'headerBgOpacity', 'headerBorderRadius', 'headerBgUrl', 'headerBgImageOpacity',
             'messageInAnimation', 'messageStayAnimation', 'messageOutAnimation',
             'messageFontFamily', 'messageTextAlign', 'textColor', 'messageTextOpacity', 'emoteSize',
-            'messageBgColor', 'messageBgOpacity', 'messageBorderRadius', 'messageBgUrl', 'messageBgFile', 'messageBgImageOpacity',
+            'messageBgColor', 'messageBgOpacity', 'messageBorderRadius', 'messageBgUrl', 'messageBgImageOpacity',
             'badgeSize', 'showTimestamps',
             'messageLetterSpacing',
             'msgShadowX', 'msgShadowY', 'msgShadowBlur', 'msgShadowColor',
@@ -168,27 +168,6 @@ class SettingsManager {
                     valueSpan.textContent = e.target.value + '%';
                 });
             }
-        });
-
-        // File inputs
-        const fileInputs = document.querySelectorAll('input[type=file]');
-        fileInputs.forEach(input => {
-            if (input.id === 'jsonFileInput') return; // Skip JSON loader
-            input.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const settingKey = input.id.replace('File', 'Url');
-                        this.updateSetting(settingKey, e.target.result);
-                        const urlInput = document.getElementById(settingKey);
-                        if (urlInput) {
-                            urlInput.value = e.target.result;
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
         });
 
         // Color inputs
