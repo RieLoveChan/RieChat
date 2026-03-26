@@ -19,7 +19,6 @@
       --item-bg-image-opacity: 0.5;
       --item-padding-v: 0px;
       --item-padding-h: 0px;
-      --item-zoom: 1.0;
       --item-in-animation: none;
       --item-stay-animation: none;
       --item-out-animation: none;
@@ -335,7 +334,6 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      transform: scale(var(--item-zoom));
       transform-origin: center;
       width: auto;
       max-width: calc(100% - calc(var(--item-padding-h) * 2));

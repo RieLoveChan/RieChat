@@ -33,7 +33,7 @@ class SettingsManager {
         const controlIds = [
             'channel', 'ignoreCommands', 'maxMessages', 'chatDirection',
             'showRedemptions', 'showCheers', 'showStreaks',
-            'itemInAnimation', 'itemStayAnimation', 'itemOutAnimation', 'animationSpeed', 'itemStretch', 'itemZoom', 'messageDecay', 'itemPaddingH', 'itemPaddingV',
+            'itemInAnimation', 'itemStayAnimation', 'itemOutAnimation', 'animationSpeed', 'itemStretch', 'messageDecay', 'itemPaddingH', 'itemPaddingV',
             'itemBgColor', 'itemBgOpacity', 'itemBgUrl', 'itemBgImageOpacity', 'borderRadius',
             'headerInAnimation', 'headerStayAnimation', 'headerOutAnimation',
             'headerFontFamily', 'headerTextAlign', 'usernameColor', 'headerTextOpacity',
@@ -217,7 +217,6 @@ class SettingsManager {
         const root = document.documentElement;
 
         // --- General Settings ---
-        root.style.setProperty('--item-zoom', this.getSafeFloat('itemZoom', 1.0));
         root.style.setProperty('--badge-size', this.getSafeInt('badgeSize', 18) + 'px');
         root.style.setProperty('--emote-size', this.getSafeInt('emoteSize', 14) + 'px');
         root.style.setProperty('--chat-direction', this.settings.chatDirection || 'column-reverse');

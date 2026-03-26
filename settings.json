@@ -7,7 +7,6 @@
     "showCheers": true,
     "showStreaks": true,
     "animationSpeed": "0.5",
-    "itemZoom": "1",
     "messageDecay": "3600",
     "borderRadius": "20",
     "headerFontFamily": "monospace",
