@@ -35,7 +35,7 @@ class ChatManager {
             if (window.ComfyJS) window.ComfyJS.Disconnect();
         }
         this.updateStatus(`Connecting to ${this.channelLogin}...`, false);
-        if (window.ComfyJS) window.ComfyJS.Init(this.channelLogin);
+        if (window.ComfyJS) window.ComfyJS.Init(this.channelLogin.toLowerCase());
         window.settingsManager.updateSetting('channel', this.channelLogin);
 
         // Show connection confirmation in chat if enabled

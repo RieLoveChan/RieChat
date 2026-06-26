@@ -17,16 +17,22 @@ class SettingsManager {
                 const jsonSettings = await response.json();
                 console.log("Loaded settings from settings.json");
                 this.settings = jsonSettings;
-                this.applyLoadedSettings();
-                this.applySettings();
             } else {
                 console.warn("settings.json not found, using defaults.");
-                this.applySettings();
             }
         } catch (e) {
             console.error("Error loading settings.json:", e);
-            this.applySettings();
         }
+
+        // Always override channel with URL param if specified
+        const params = new URLSearchParams(window.location.search);
+        const urlChannel = params.get('channel');
+        if (urlChannel) {
+            this.settings.channel = urlChannel;
+        }
+
+        this.applyLoadedSettings();
+        this.applySettings();
     }
 
     initControls() {
@@ -197,6 +203,28 @@ class SettingsManager {
 
     updateSetting(key, value) {
         this.settings[key] = value;
+
+        // Synchronize the DOM control if it exists
+        const control = this.controls[key];
+        if (control) {
+            if (control.type === 'checkbox') {
+                control.checked = !!value;
+            } else if (control.tagName === 'INPUT' || control.tagName === 'SELECT') {
+                control.value = value;
+                // Trigger display updates for color or range inputs
+                if (control.type === 'color') {
+                    const display = control.parentElement.querySelector('.hex-display');
+                    if (display) display.textContent = String(value).toUpperCase();
+                }
+                if (control.type === 'range') {
+                    const valueSpan = document.getElementById(key + 'Value');
+                    if (valueSpan) {
+                        valueSpan.textContent = value + '%';
+                    }
+                }
+            }
+        }
+
         this.applySettings();
         this.updateJsonTextArea();
     }
