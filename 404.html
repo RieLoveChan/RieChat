@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RieChat - Redirecting...</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1a1a1a;
+      color: #ffffff;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .loader-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border-left-color: #a855f7;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 10px 0;
+    }
+
+    p {
+      color: #a3a3a3;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+  </style>
+  <script>
+    (function () {
+      // Parse the pathname, e.g., "/RieChat/xqc" or "/xqc"
+      const pathname = window.location.pathname;
+      const parts = pathname.split('/').filter(Boolean);
+
+      // The last part is expected to be the channel name
+      if (parts.length > 0) {
+        const channel = parts[parts.length - 1];
+        const lowerChannel = channel.toLowerCase();
+
+        // Avoid redirecting if the path points to actual static files that might 404
+        const ignoredExtensions = ['.js', '.css', '.json', '.png', '.jpg', '.jpeg', '.gif', '.ico'];
+        const isFile = ignoredExtensions.some(ext => lowerChannel.endsWith(ext));
+
+        if (!isFile && lowerChannel !== 'index.html' && lowerChannel !== 'riechat') {
+          // If the repo name is "RieChat", preserve it in the prefix
+          const hasRepo = parts[0].toLowerCase() === 'riechat';
+          const prefix = hasRepo ? '/RieChat' : '';
+
+          // Redirect to index.html with the channel query parameter
+          window.location.replace(window.location.origin + prefix + '/index.html?channel=' + encodeURIComponent(channel));
+          return;
+        }
+      }
+
+      // Default fallback
+      const hasRepo = parts.length > 0 && parts[0].toLowerCase() === 'riechat';
+      const prefix = hasRepo ? '/RieChat' : '';
+      window.location.replace(window.location.origin + prefix + '/index.html');
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="loader-container">
+    <div class="loader"></div>
+    <h1>Connecting to RieChat</h1>
+    <p>Redirecting you to the chat overlay...</p>
+  </div>
+</body>
+
+</html>

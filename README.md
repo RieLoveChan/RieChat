@@ -11,9 +11,15 @@ RieChat is a clean, modern, and highly customizable Twitch chat overlay designed
 
 ### 🚀 Try It Instantly (No Installation Required!)
 You can test and use RieChat immediately without downloading or installing anything! Simply use the hosted version on GitHub Pages:
-```text
-https://rielovechan.github.io/RieChat/index.html?channel=YourTwitchChannel
-```
+
+*   **Clean URL (Recommended):**
+    ```text
+    https://rielovechan.github.io/RieChat/YourTwitchChannel
+    ```
+*   **Standard URL:**
+    ```text
+    https://rielovechan.github.io/RieChat/index.html?channel=YourTwitchChannel
+    ```
 *Replace `YourTwitchChannel` with your actual Twitch username.*
 
 ---
@@ -51,9 +57,15 @@ RieChat es una superposición de chat de Twitch limpia, moderna y altamente pers
 
 ### 🚀 Pruébalo al Instante (¡Sin necesidad de instalar nada!)
 ¡Puedes probar y usar RieChat de inmediato sin descargar ni instalar nada en tu PC! Simplemente utiliza la versión alojada en GitHub Pages:
-```text
-https://rielovechan.github.io/RieChat/index.html?channel=TuCanalDeTwitch
-```
+
+*   **URL Limpia (Recomendado):**
+    ```text
+    https://rielovechan.github.io/RieChat/TuCanalDeTwitch
+    ```
+*   **URL Estándar:**
+    ```text
+    https://rielovechan.github.io/RieChat/index.html?channel=TuCanalDeTwitch
+    ```
 *Reemplaza `TuCanalDeTwitch` por tu nombre de usuario de Twitch.*
 
 ---
@@ -73,7 +85,7 @@ https://rielovechan.github.io/RieChat/index.html?channel=TuCanalDeTwitch
 
 #### 1. Agregar a OBS Studio
 1.  Añade una nueva fuente de **Navegador** (Browser Source) en tu escena de OBS.
-2.  Coloca la URL: `https://rielovechan.github.io/TuCanalDeTwitch` (o marca la casilla de **Archivo local** y selecciona tu archivo `index.html` descargado).
+2.  Coloca la URL: `https://rielovechan.github.io/RieChat/TuCanalDeTwitch` (o marca la casilla de **Archivo local** y selecciona tu archivo `index.html` descargado).
 3.  Configura el ancho y alto deseado (ej. `1920`x`1080` o un formato más angosto según tu diseño de transmisión).
 4.  RieChat ocultará automáticamente el panel de control y el fondo para que los mensajes floten con transparencia.
 
